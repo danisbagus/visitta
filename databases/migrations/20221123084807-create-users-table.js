@@ -7,6 +7,7 @@ module.exports = {
       id: {
         type: Sequelize.UUID,
         required: true,
+        primaryKey: true,
       },
       email: {
         type: Sequelize.STRING(50),
