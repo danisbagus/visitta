@@ -17,10 +17,10 @@
                 <h3 class="float-md-left mb-0">VisitTA</h3>
                 <nav class="nav nav-masthead justify-content-center float-md-right">
                     <a class="nav-link active" aria-current="page" href="#">Home</a>
-                    <a class="nav-link" href="/campgrounds">Spots</a>
+                    <a class="nav-link" href="/spots">Spots</a>
                     <% if(!currentUser) { %>
                         <a class="nav-link" href="/login">Login</a>
-                        <a class="nav-link" href="/view/register">Register</a>
+                        <a class="nav-link" href="/register">Register</a>
                         <% } else { %>
                             <a class="nav-link" href="/logout">Logout</a>
                             <% } %>
@@ -30,10 +30,8 @@
         <main class="px-3">
             <h1>VisitTA</h1>
             <p class="lead"> Welcome to our page<br> Jump right in and explore wonderful spots in Tulungagung
-                <!-- <br>
-                Lets Visit Tulungagung! -->
             </p>
-            <a href="/places" class="btn btn-lg btn-secondary font-weight-bold border-white bg-white">View
+            <a href="/spots" class="btn btn-lg btn-secondary font-weight-bold border-white bg-white">View
                 Spots</a>
         </main>
 

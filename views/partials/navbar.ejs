@@ -8,13 +8,13 @@
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
                 <a class="nav-link" href="/">Home</a>
-                <a class="nav-link" href="/campgrounds">Spots</a>
-                <a class="nav-link" href="/campgrounds/new">New Spots</a>
+                <a class="nav-link" href="/spots">Spots</a>
+                <a class="nav-link" href="/spots/new">New Spots</a>
             </div>
             <div class="navbar-nav ml-auto">
                 <% if(!currentUser) {%>
                     <a class="nav-link" href="/login">Login</a>
-                    <a class="nav-link" href="/view/register">Register</a>
+                    <a class="nav-link" href="/register">Register</a>
                     <% } else {%>
                         <a class="nav-link" href="/logout">Logout</a>
                         <% } %>
