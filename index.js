@@ -7,7 +7,9 @@ import session from "express-session";
 import path from "path";
 import { fileURLToPath } from "url";
 
-import routes from "./routes/routes.js";
+import apiRoutes from "./routes/api/routes.js";
+import viewRoutes from "./routes/view/routes.js";
+
 import config from "./config/app.js";
 
 const app = express();
@@ -60,7 +62,9 @@ app.use((req, res, next) => {
   next();
 });
 
-routes(app, express);
+// routes
+app.use("/", viewRoutes());
+app.use("/api", apiRoutes());
 
 app.listen(config.port, () => {
   console.log(`Running app on port ${config.port}`);

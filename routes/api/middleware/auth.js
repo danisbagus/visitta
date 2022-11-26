@@ -1,4 +1,4 @@
-import jwt from "../../utils/jwt.js";
+import jwt from "../../../utils/jwt.js";
 
 export default (req, res, next) => {
   const token = req.header("Authorization");
