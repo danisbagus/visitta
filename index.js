@@ -1,11 +1,39 @@
 import express from "express";
 import bodyParser from "body-parser";
 import morgan from "morgan";
+import ejsMate from "ejs-mate";
+import flash from "connect-flash";
+import session from "express-session";
+import path from "path";
+import { fileURLToPath } from "url";
 
 import routes from "./routes/routes.js";
 import config from "./config/app.js";
 
 const app = express();
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const secret = config.jwtSecret;
+
+const sessionConfig = {
+  name: "session",
+  secret,
+  resave: false,
+  saveUninitialized: true,
+  cookie: {
+    httpOnly: true,
+    // secure: true,
+    expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
+    maxAge: 1000 * 60 * 60 * 24 * 7,
+  },
+};
+
+// template engine
+app.engine("ejs", ejsMate);
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views"));
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -15,6 +43,22 @@ app.use(bodyParser.json());
 
 // HTTP request logger middleware
 app.use(morgan("dev"));
+
+// session
+app.use(session(sessionConfig));
+
+// storing message with session
+app.use(flash());
+
+// static file
+app.use(express.static(path.join(__dirname, "public")));
+
+app.use((req, res, next) => {
+  res.locals.currentUser = req.user;
+  res.locals.success = req.flash("success");
+  res.locals.error = req.flash("error");
+  next();
+});
 
 routes(app, express);
 
