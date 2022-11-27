@@ -6,6 +6,9 @@ export default (sequelize, DataTypes) => {
         type: DataTypes.UUID,
         primaryKey: true,
       },
+      name: {
+        type: DataTypes.STRING,
+      },
       email: {
         type: DataTypes.STRING,
       },

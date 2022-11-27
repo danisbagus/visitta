@@ -9,6 +9,10 @@ module.exports = {
         required: true,
         primaryKey: true,
       },
+      name: {
+        type: Sequelize.STRING(20),
+        required: true,
+      },
       email: {
         type: Sequelize.STRING(50),
         required: true,

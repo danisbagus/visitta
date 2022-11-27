@@ -1,11 +1,11 @@
 export default (userService) => {
   const register = async (req, res) => {
-    const { email, password } = req.body;
+    const { name, email, password } = req.body;
     const { isRedirect } = req.query;
 
     const role = "user";
     try {
-      const user = await userService.register(email, password, role);
+      const user = await userService.register(name, email, password, role);
 
       if (isRedirect) {
         req.flash("success", "successfully register");

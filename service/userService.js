@@ -1,4 +1,3 @@
-import randomstring from "randomstring";
 import crypto from "crypto";
 
 import jwt from "../utils/jwt.js";
@@ -6,7 +5,10 @@ import errs from "../utils/errs.js";
 import bycript from "../utils/bycript.js";
 
 export default (userRepository) => {
-  const register = async (email, password, role) => {
+  const register = async (name, email, password, role) => {
+    if (!name) {
+      throw errs.badRequestError("name is required");
+    }
     if (!email) {
       throw errs.badRequestError("email is required");
     }
@@ -28,6 +30,7 @@ export default (userRepository) => {
 
     const insertData = {
       id: userID,
+      name,
       email,
       password: hashPassword,
       role,
