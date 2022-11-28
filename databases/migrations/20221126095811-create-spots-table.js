@@ -22,10 +22,7 @@ module.exports = {
         type: Sequelize.STRING(100),
         required: true,
       },
-      images: {
-        type: Sequelize.STRING(255),
-      },
-      created_by: {
+      user_id: {
         type: Sequelize.INTEGER,
       },
       timestamp: {
