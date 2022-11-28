@@ -9,7 +9,9 @@
             <div class="navbar-nav">
                 <a class="nav-link" href="/">Home</a>
                 <a class="nav-link" href="/spot">Spots</a>
-                <a class="nav-link" href="/spot/new">New Spots</a>
+                <% if(currentUser && currentUser.role=='admin' ) {%>
+                    <a class="nav-link" href="/spot/new">New Spots</a>
+                    <% } %>
             </div>
             <div class="navbar-nav ml-auto">
                 <% if(!currentUser) {%>
