@@ -29,15 +29,18 @@ export default (userService) => {
     const { isRedirect } = req.query;
 
     try {
-      const tokenData = await userService.login(email, password);
+      const loginData = await userService.login(email, password);
       if (isRedirect) {
-        req.flash("success", "welcome back!");
+        req.session.user = loginData.user;
+        req.flash("success", `Welcome back, ${loginData.user.name}`);
+
         const redirectUrl = req.session.returnTo || "/spot";
         delete req.session.returnTo;
+
         return res.redirect(redirectUrl);
       }
 
-      res.sendSuccess("successfully login", tokenData, 200);
+      res.sendSuccess("successfully login", loginData, 200);
     } catch (error) {
       if (isRedirect) {
         req.flash("error", error.message);

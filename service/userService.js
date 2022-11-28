@@ -63,6 +63,7 @@ export default (userRepository) => {
 
     const claim = {
       id: user.id,
+      name: user.name,
       email: user.email,
       role: user.role,
       timestamp: user.timestamp,
@@ -70,7 +71,7 @@ export default (userRepository) => {
 
     const token = jwt.generateToken(claim);
 
-    return { token };
+    return { token, user: claim };
   };
 
   const getClaim = (user) => {
