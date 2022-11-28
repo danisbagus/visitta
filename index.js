@@ -6,10 +6,7 @@ import flash from "connect-flash";
 import session from "express-session";
 import path from "path";
 import { fileURLToPath } from "url";
-
-import apiRoutes from "./routes/api/routes.js";
-import viewRoutes from "./routes/view/routes.js";
-
+import routes from "./routes/routes.js";
 import config from "./config/app.js";
 
 const app = express();
@@ -63,8 +60,7 @@ app.use((req, res, next) => {
 });
 
 // routes
-app.use("/", viewRoutes());
-app.use("/api", apiRoutes());
+routes(app);
 
 app.listen(config.port, () => {
   console.log(`Running app on port ${config.port}`);

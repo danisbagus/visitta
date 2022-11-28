@@ -1,4 +1,5 @@
 export default (userService) => {
+  // API
   const register = async (req, res) => {
     const { name, email, password } = req.body;
     const { isRedirect } = req.query;
@@ -31,7 +32,7 @@ export default (userService) => {
       const tokenData = await userService.login(email, password);
       if (isRedirect) {
         req.flash("success", "welcome back!");
-        const redirectUrl = req.session.returnTo || "/spots";
+        const redirectUrl = req.session.returnTo || "/spot";
         delete req.session.returnTo;
         return res.redirect(redirectUrl);
       }
@@ -56,5 +57,14 @@ export default (userService) => {
     }
   };
 
-  return { register, login, getClaim };
+  // VIEW
+  const registerView = (req, res) => {
+    res.render("register");
+  };
+
+  const loginView = (req, res) => {
+    res.render("login");
+  };
+
+  return { register, login, getClaim, registerView, loginView };
 };
