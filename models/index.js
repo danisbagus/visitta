@@ -3,13 +3,14 @@ import configs from "../config/sequelize.js";
 import userModel from "./userModel.js";
 import spotModel from "./spotModel.js";
 import imageModel from "./imageModel.js";
+import reviewModel from "./reviewModel.js";
 
 const env = process.env.NODE_ENV || "development";
 const config = configs[env];
 
 const db = {};
 
-const models = [userModel, spotModel, imageModel];
+const models = [userModel, spotModel, imageModel, reviewModel];
 
 let sequelize;
 if (config.use_env_variable) {
