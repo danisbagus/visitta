@@ -4,6 +4,7 @@ import morgan from "morgan";
 import ejsMate from "ejs-mate";
 import flash from "connect-flash";
 import session from "express-session";
+import cookieParser from "cookie-parser";
 import path from "path";
 import { fileURLToPath } from "url";
 import routes from "./routes/routes.js";
@@ -15,18 +16,14 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const secret = config.jwtSecret;
+const oneDay = 1000 * 60 * 60 * 24;
 
 const sessionConfig = {
   name: "session",
   secret,
-  resave: false,
   saveUninitialized: true,
-  cookie: {
-    httpOnly: true,
-    // secure: true,
-    expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
-    maxAge: 1000 * 60 * 60 * 24 * 7,
-  },
+  cookie: { maxAge: oneDay },
+  resave: false,
 };
 
 // template engine
@@ -39,6 +36,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 // parse application/json
 app.use(bodyParser.json());
+
+// cookie parser middleware
+app.use(cookieParser());
 
 // HTTP request logger middleware
 app.use(morgan("dev"));
@@ -53,7 +53,7 @@ app.use(flash());
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use((req, res, next) => {
-  res.locals.currentUser = req.user;
+  res.locals.currentUser = req.session.user;
   res.locals.success = req.flash("success");
   res.locals.error = req.flash("error");
   next();
