@@ -23,6 +23,7 @@ export default (app) => {
   viewRoute.get("/", homeView);
   viewRoute.get("/register", _userHandler.registerView);
   viewRoute.get("/login", _userHandler.loginView);
+  viewRoute.get("/logout", _userHandler.logoutView);
   viewRoute.get("/spot", _spotHandler.ListView);
   viewRoute.get("/spot/:id", _spotHandler.DetailView);
 

@@ -69,5 +69,10 @@ export default (userService) => {
     res.render("login");
   };
 
-  return { register, login, getClaim, registerView, loginView };
+  const logoutView = (req, res) => {
+    req.session.destroy();
+    res.redirect("/");
+  };
+
+  return { register, login, getClaim, registerView, loginView, logoutView };
 };
