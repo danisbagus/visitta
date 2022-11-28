@@ -8,6 +8,16 @@ export default (spotService) => {
     }
   };
 
+  const getDetail = async (req, res) => {
+    try {
+      const id = req.params.id;
+      const spot = await spotService.getDetail(id);
+      return res.sendSuccess("successfully get spot", spot, 200);
+    } catch (error) {
+      return res.sendError(error.message, null, error.statusCode);
+    }
+  };
+
   const ListView = async (req, res) => {
     let spots = [];
     try {
@@ -17,5 +27,17 @@ export default (spotService) => {
     }
     return res.render("spot/list", { spots });
   };
-  return { getList, ListView };
+
+  const DetailView = async (req, res) => {
+    try {
+      const id = req.params.id;
+      const spot = await spotService.getDetail(id);
+      return res.render("spot/detail", { spot });
+    } catch (error) {
+      req.flash("error", error.message);
+      return res.redirect("/spot");
+    }
+  };
+
+  return { getList, getDetail, ListView, DetailView };
 };

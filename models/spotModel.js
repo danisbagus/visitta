@@ -35,6 +35,10 @@ export default (sequelize, DataTypes) => {
     Spot.hasMany(models.images, {
       foreignKey: "spot_id",
     });
+
+    Spot.hasMany(models.reviews, {
+      foreignKey: "spot_id",
+    });
   };
 
   return Spot;

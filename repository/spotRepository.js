@@ -4,5 +4,17 @@ export default (db) => {
       include: { model: db.images, attributes: ["url"] },
     });
 
-  return { findAll };
+  const findOneByID = (id) =>
+    db.spots.findOne({
+      where: {
+        id: id,
+      },
+      include: [
+        { model: db.users, attributes: ["name"] },
+        { model: db.images, attributes: ["url"] },
+        { model: db.reviews, attributes: ["rating", "body"] },
+      ],
+    });
+
+  return { findAll, findOneByID };
 };
