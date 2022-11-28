@@ -1,13 +1,15 @@
 import Sequelize from "sequelize";
 import configs from "../config/sequelize.js";
 import userModel from "./userModel.js";
+import spotModel from "./spotModel.js";
+import imageModel from "./imageModel.js";
 
 const env = process.env.NODE_ENV || "development";
 const config = configs[env];
 
 const db = {};
 
-const models = [userModel];
+const models = [userModel, spotModel, imageModel];
 
 let sequelize;
 if (config.use_env_variable) {
@@ -19,6 +21,12 @@ if (config.use_env_variable) {
 models.map((initModel) => {
   const model = initModel(sequelize, Sequelize.DataTypes);
   db[model.name] = model;
+});
+
+Object.keys(db).forEach((modelName) => {
+  if (db[modelName].associate) {
+    db[modelName].associate(db);
+  }
 });
 
 db.sequelize = sequelize;
