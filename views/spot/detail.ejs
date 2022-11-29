@@ -53,7 +53,8 @@
         <div class="col-6">
             <% if(currentUser){ %>
                 <h2>Leave a Review</h2>
-                <form action="/spot/<%=spot.id%>/review" method="POST" class="mb-3 validated-form" novalidate>
+                <form action="/api/spot/<%=spot.id%>/review?isRedirect=true" method="POST" class="mb-3 validated-form"
+                    novalidate>
                     <div class="mb-3">
                         <label class="form-label" for="rating">Rating</label>
                         <fieldset class="starability-basic">
@@ -92,7 +93,8 @@
                                 <p class="card-text">Review: <%= review.body %>
                                 </p>
                                 <% if( currentUser && review.user_id==currentUser.id) {%>
-                                    <form action="/spot/<%=spot.id%>/delete-review/<%=review.id%>" method="POST">
+                                    <form action="/api/spot/<%=spot.id%>/delete-review/<%=review.id%>?isRedirect=true"
+                                        method="POST">
                                         <button class="btn btn-sm btn-danger">Delete</button>
                                     </form>
                                     <% } %>

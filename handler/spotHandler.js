@@ -1,4 +1,4 @@
-export default (spotService) => {
+export default (spotService, reviewService) => {
   const getList = async (req, res) => {
     try {
       const spots = await spotService.getList();
@@ -53,6 +53,46 @@ export default (spotService) => {
     }
   };
 
+  const insertReview = async (req, res) => {
+    const { rating, body } = req.body;
+    const { isRedirect } = req.query;
+
+    const userID = req.user.id;
+    const spotID = req.params.id;
+
+    try {
+      await reviewService.insert(userID, spotID, body, rating);
+
+      if (isRedirect) {
+        req.flash("success", "Successfully submit review");
+        return res.redirect(`/spot/${spotID}`);
+      }
+
+      return res.sendSuccess("successfully insert review", null, 201);
+    } catch (error) {
+      if (isRedirect) {
+        req.flash("error", error.message);
+        return res.redirect(`/spot/${spotID}`);
+      }
+      return res.sendError(error.message, null, error.statusCode);
+    }
+  };
+
+  const removeReview = async (req, res) => {
+    const spotID = req.params.id;
+    const reviewID = req.params.review_id;
+
+    try {
+      await reviewService.remove(reviewID);
+      req.flash("success", "Successfully delete review");
+
+      return res.redirect(`/spot/${spotID}`);
+    } catch (error) {
+      req.flash("error", error.message);
+      return res.redirect(`/spot/${spotID}`);
+    }
+  };
+
   const listView = async (req, res) => {
     let spots = [];
     try {
@@ -78,5 +118,14 @@ export default (spotService) => {
     return res.render("spot/new");
   };
 
-  return { getList, getDetail, insert, listView, detailView, newView };
+  return {
+    getList,
+    getDetail,
+    insert,
+    insertReview,
+    removeReview,
+    listView,
+    detailView,
+    newView,
+  };
 };

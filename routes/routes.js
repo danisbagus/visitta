@@ -9,7 +9,6 @@ import spotService from "../service/spotService.js";
 import reviewService from "../service/reviewService.js";
 import userHandler from "../handler/userHandler.js";
 import spotHandler from "../handler/spotHandler.js";
-import reviewHandler from "../handler/reviewHandler.js";
 import authMiddleware from "./middleware/auth.js";
 import resHandling from "./middleware/resHandling.js";
 import db from "../models/index.js";
@@ -28,8 +27,7 @@ export default (app) => {
   const _reviewService = reviewService(_reviewRepository);
 
   const _userHandler = userHandler(_userService);
-  const _spotHandler = spotHandler(_spotService);
-  const _reviewHandler = reviewHandler(_reviewService);
+  const _spotHandler = spotHandler(_spotService, _reviewService);
 
   // VIEW ROUTE
   const viewRoute = express.Router();
@@ -40,8 +38,6 @@ export default (app) => {
   viewRoute.get("/spot", _spotHandler.listView);
   viewRoute.get("/spot/new", _spotHandler.newView);
   viewRoute.get("/spot/:id", _spotHandler.detailView);
-  viewRoute.post("/spot/:id/review", _reviewHandler.submit);
-  viewRoute.post("/spot/:id/delete-review/:review_id", _reviewHandler.remove);
 
   app.use("/", viewRoute);
 
@@ -63,9 +59,12 @@ export default (app) => {
     upload.array("images"),
     _spotHandler.insert
   );
-
-  // review
-  apiRoute.post("/review", authMiddleware, _reviewHandler.insert);
+  apiRoute.post("/spot/:id/review", authMiddleware, _spotHandler.insertReview);
+  apiRoute.post(
+    "/spot/:id/delete-review/:review_id",
+    authMiddleware,
+    _spotHandler.removeReview
+  );
 
   app.use("/api", apiRoute);
 };
