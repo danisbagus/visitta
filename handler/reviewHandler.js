@@ -1,11 +1,11 @@
 export default (reviewService) => {
-  const create = async (req, res) => {
+  const insert = async (req, res) => {
     const { rating, body, spot_id } = req.body;
     const userID = req.user.id;
 
     try {
-      await reviewService.create(userID, spot_id, body, rating);
-      return res.sendSuccess("successfully create review", null, 201);
+      await reviewService.insert(userID, spot_id, body, rating);
+      return res.sendSuccess("successfully insert review", null, 201);
     } catch (error) {
       return res.sendError(error.message, null, error.statusCode);
     }
@@ -17,7 +17,7 @@ export default (reviewService) => {
     const spotID = req.params.id;
 
     try {
-      await reviewService.create(userID, spotID, body, rating);
+      await reviewService.insert(userID, spotID, body, rating);
       req.flash("success", "Successfully submit review");
       return res.redirect(`/spot/${spotID}`);
     } catch (error) {
@@ -41,5 +41,5 @@ export default (reviewService) => {
     }
   };
 
-  return { create, submit, remove };
+  return { insert, submit, remove };
 };

@@ -2,7 +2,7 @@ import crypto from "crypto";
 import errs from "../utils/errs.js";
 
 export default (ratingRepository) => {
-  const create = async (userID, spotID, body, rating) => {
+  const insert = async (userID, spotID, body, rating) => {
     if (!userID) {
       throw errs.badRequestError("user id is required");
     }
@@ -17,6 +17,7 @@ export default (ratingRepository) => {
     }
 
     const reviewID = crypto.randomUUID();
+    const currentTime = new Date().getTime();
 
     const insertData = {
       id: reviewID,
@@ -24,6 +25,7 @@ export default (ratingRepository) => {
       spot_id: spotID,
       body,
       rating,
+      timestamp: currentTime,
     };
 
     await ratingRepository.insert(insertData);
@@ -35,5 +37,5 @@ export default (ratingRepository) => {
     await ratingRepository.deleteByID(reviewID);
   };
 
-  return { create, remove };
+  return { insert, remove };
 };
