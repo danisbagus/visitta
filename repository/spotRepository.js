@@ -1,4 +1,6 @@
 export default (db) => {
+  const insert = (spot) => db.spots.create(spot);
+
   const findAll = () =>
     db.spots.findAll({
       include: { model: db.images, attributes: ["url"] },
@@ -22,5 +24,5 @@ export default (db) => {
       ],
     });
 
-  return { findAll, findOneByID };
+  return { insert, findAll, findOneByID };
 };

@@ -1,7 +1,9 @@
 import express from "express";
+import multer from "multer";
 import userRepository from "../repository/userRepository.js";
 import spotRepository from "../repository/spotRepository.js";
 import reviewRepository from "../repository/reviewRepository.js";
+import imageRepository from "../repository/imageRepository.js";
 import userService from "../service/userService.js";
 import spotService from "../service/spotService.js";
 import reviewService from "../service/reviewService.js";
@@ -11,18 +13,22 @@ import reviewHandler from "../handler/reviewHandler.js";
 import authMiddleware from "./middleware/auth.js";
 import resHandling from "./middleware/resHandling.js";
 import db from "../models/index.js";
+import cloudinary from "../utils/cloudinary.js";
+
+const upload = multer({ storage: cloudinary.storage });
 
 export default (app) => {
   const _userRepository = userRepository(db);
-  const _userService = userService(_userRepository);
-  const _userHandler = userHandler(_userService);
-
   const _spotRepository = spotRepository(db);
-  const _spotService = spotService(_spotRepository);
-  const _spotHandler = spotHandler(_spotService);
-
   const _reviewRepository = reviewRepository(db);
+  const _imageRepository = imageRepository(db);
+
+  const _userService = userService(_userRepository);
+  const _spotService = spotService(_spotRepository, _imageRepository);
   const _reviewService = reviewService(_reviewRepository);
+
+  const _userHandler = userHandler(_userService);
+  const _spotHandler = spotHandler(_spotService);
   const _reviewHandler = reviewHandler(_reviewService);
 
   // VIEW ROUTE
@@ -31,8 +37,9 @@ export default (app) => {
   viewRoute.get("/register", _userHandler.registerView);
   viewRoute.get("/login", _userHandler.loginView);
   viewRoute.get("/logout", _userHandler.logoutView);
-  viewRoute.get("/spot", _spotHandler.ListView);
-  viewRoute.get("/spot/:id", _spotHandler.DetailView);
+  viewRoute.get("/spot", _spotHandler.listView);
+  viewRoute.get("/spot/new", _spotHandler.newView);
+  viewRoute.get("/spot/:id", _spotHandler.detailView);
   viewRoute.post("/spot/:id/review", _reviewHandler.submit);
   viewRoute.post("/spot/:id/delete-review/:review_id", _reviewHandler.remove);
 
@@ -50,9 +57,15 @@ export default (app) => {
   // spot
   apiRoute.get("/spot", _spotHandler.getList);
   apiRoute.get("/spot/:id", _spotHandler.getDetail);
+  apiRoute.post(
+    "/spot",
+    authMiddleware,
+    upload.array("images"),
+    _spotHandler.insert
+  );
 
   // review
-  apiRoute.post("/review", authMiddleware, _reviewHandler.create);
+  apiRoute.post("/review", authMiddleware, _reviewHandler.insert);
 
   app.use("/api", apiRoute);
 };
