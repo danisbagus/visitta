@@ -25,6 +25,9 @@ module.exports = {
         type: Sequelize.TINYINT,
         required: true,
       },
+      timestamp: {
+        type: Sequelize.INTEGER,
+      },
     });
   },
 

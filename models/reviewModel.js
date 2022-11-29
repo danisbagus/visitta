@@ -12,20 +12,26 @@ export default (sequelize, DataTypes) => {
       spot_id: {
         type: DataTypes.UUID,
       },
-      url: {
-        type: DataTypes.STRING,
-      },
       body: {
         type: DataTypes.STRING(100),
       },
       rating: {
         type: DataTypes.TINYINT,
       },
+      timestamp: {
+        type: DataTypes.INTEGER,
+      },
     },
     {
       timestamps: false,
     }
   );
+
+  Review.associate = (models) => {
+    Review.belongsTo(models.users, {
+      foreignKey: "user_id",
+    });
+  };
 
   return Review;
 };
