@@ -32,6 +32,8 @@ export default (userService) => {
       const loginData = await userService.login(email, password);
       if (isRedirect) {
         req.session.user = loginData.user;
+        req.session.token = loginData.token;
+
         req.flash("success", `Welcome back, ${loginData.user.name}`);
 
         const redirectUrl = req.session.returnTo || "/spot";
