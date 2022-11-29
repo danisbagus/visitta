@@ -2,6 +2,7 @@ export default (db) => {
   const findAll = () =>
     db.spots.findAll({
       include: { model: db.images, attributes: ["url"] },
+      order: [["title", "ASC"]],
     });
 
   const findOneByID = (id) =>
@@ -12,7 +13,12 @@ export default (db) => {
       include: [
         { model: db.users, attributes: ["name"] },
         { model: db.images, attributes: ["url"] },
-        { model: db.reviews, attributes: ["rating", "body"] },
+        {
+          model: db.reviews,
+          attributes: ["id", "user_id", "rating", "body"],
+          include: { model: db.users, attributes: ["name"] },
+          order: [["timestamp", "DESC"]],
+        },
       ],
     });
 
