@@ -37,6 +37,7 @@ export default (app) => {
   viewRoute.get("/logout", _userHandler.logoutView);
   viewRoute.get("/spot", _spotHandler.listView);
   viewRoute.get("/spot/new", _spotHandler.newView);
+  viewRoute.get("/spot/:id/edit", _spotHandler.editView);
   viewRoute.get("/spot/:id", _spotHandler.detailView);
 
   app.use("/", viewRoute);
@@ -52,6 +53,7 @@ export default (app) => {
 
   // spot
   apiRoute.get("/spot", _spotHandler.getList);
+  apiRoute.get("/spot/update/:id", _spotHandler.getDetail);
   apiRoute.get("/spot/:id", _spotHandler.getDetail);
   apiRoute.post(
     "/spot",
@@ -59,7 +61,13 @@ export default (app) => {
     upload.array("images"),
     _spotHandler.insert
   );
-  apiRoute.post("/spot/:id/review", authMiddleware, _spotHandler.insertReview);
+  apiRoute.post(
+    "/spot/update/:id",
+    authMiddleware,
+    upload.array("images"),
+    _spotHandler.update
+  );
+  apiRoute.post("/spot/:id/review", authMiddleware, _spotHandler.update);
   apiRoute.post(
     "/spot/:id/delete-review/:review_id",
     authMiddleware,

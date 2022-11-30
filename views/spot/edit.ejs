@@ -1,0 +1,47 @@
+<% layout('layouts/boilerplate')%>
+    <div class="row">
+        <h1 class="text-center">Edit Spot</h1>
+        <div class="col-md-6 offset-md-3">
+            <form action="/api/spot/update/<%=spot.id%>?isRedirect=true" method="POST" novalidate class="validated-form"
+                enctype="multipart/form-data">
+                <div class="mb-3">
+                    <label class="form-label" for="title">Title</label>
+                    <input class="form-control" type="text" id="title" name="title" value="<%=spot.title %>" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="location">Location</label>
+                    <input class="form-control" type="text" id="location" name="location" value="<%=spot.location %>"
+                        required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="description">Description</label>
+                    <textarea class="form-control" type="text" id="description" name="description"
+                        required><%= spot.description%></textarea>
+                </div>
+                <div class="mb-3">
+                    <div class="form-file custom-file">
+                        <input type="file" class="form-file-input" id="images" name="images" multiple>
+                        <label class="form-file-label" for="images">
+                            <span class="form-file-text custom-file-label">Add more image(s)...</span>
+                            <span class="form-file-button">Browse</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <% spot.images.forEach(function(image, i) { %>
+
+                        <img src="<%=image.thumbnail %>" class="img-thumbnail" alt="">
+                        <div class="form-check-inline">
+                            <input type="checkbox" id="image-<%=i%>" name="deleteImages[]" value="<%=image.filename%>">
+                        </div>
+                        <label for="image-<%=i%>">Delete</label>
+                        <% })%>
+                </div>
+                <div class="mb-3">
+                    <button class="btn btn-info">Update Spot</button>
+                </div>
+            </form>
+            <a href="/spot/<%= spot.id%>">Back To Spot</a>
+
+        </div>
+    </div>

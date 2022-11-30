@@ -1,5 +1,6 @@
 import crypto from "crypto";
 import errs from "../utils/errs.js";
+import cloudinary from "../utils/cloudinary.js";
 
 export default (spotRepository, imageRepository) => {
   const insert = async (userID, title, description, location, uploadImages) => {
@@ -40,6 +41,7 @@ export default (spotRepository, imageRepository) => {
         id: imageID,
         spot_id: spotID,
         url: image.url,
+        filename: image.filename,
       };
 
       insertImages.push(imageData);
@@ -74,5 +76,54 @@ export default (spotRepository, imageRepository) => {
     return spot;
   };
 
-  return { insert, getList, getDetail };
+  const update = async (form) => {
+    // validation
+    if (!form.title) {
+      throw errs.badRequestError("title is required");
+    }
+    if (!form.description) {
+      throw errs.badRequestError("description is required");
+    }
+    if (!form.location) {
+      throw errs.badRequestError("location is required");
+    }
+
+    // update spot
+    const updateSpotData = {
+      title: form.title,
+      description: form.description,
+      location: form.location,
+    };
+
+    await spotRepository.updateByID(form.spotID, updateSpotData);
+
+    // insert images
+    let insertImages = [];
+    form.uploadImages.map((image) => {
+      const imageID = crypto.randomUUID();
+      const imageData = {
+        id: imageID,
+        spot_id: form.spotID,
+        url: image.url,
+        filename: image.filename,
+      };
+
+      insertImages.push(imageData);
+    });
+
+    if (insertImages.length > 0) {
+      await imageRepository.bulkInsert(insertImages);
+    }
+
+    // delete images
+    if (form.deleteImages) {
+      for (let filename of form.deleteImages) {
+        await cloudinary.cloudinary.uploader.destroy(filename);
+      }
+
+      await imageRepository.bulkDeleteByFilenames(form.deleteImages);
+    }
+  };
+
+  return { insert, getList, getDetail, update };
 };

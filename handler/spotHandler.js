@@ -26,7 +26,7 @@ export default (spotService, reviewService) => {
 
     let uploadImages = req.files.map((f) => ({
       url: f.path,
-      filename: f.uploadImages,
+      filename: f.filename,
     }));
 
     try {
@@ -48,6 +48,44 @@ export default (spotService, reviewService) => {
       if (isRedirect) {
         req.flash("error", error.message);
         return res.redirect("/spot/new");
+      }
+      return res.sendError(error.message, null, error.statusCode);
+    }
+  };
+
+  const update = async (req, res) => {
+    const { title, location, description, deleteImages } = req.body;
+    const { isRedirect } = req.query;
+    const spotID = req.params.id;
+
+    let uploadImages = req.files.map((f) => ({
+      url: f.path,
+      filename: f.filename,
+    }));
+
+    const formUpdate = {
+      spotID,
+      title,
+      description,
+      location,
+      uploadImages,
+      deleteImages,
+    };
+
+    try {
+      await spotService.update(formUpdate);
+
+      if (isRedirect) {
+        req.flash("success", "Successfully update spot");
+        return res.redirect("/spot");
+      }
+
+      return res.sendSuccess("successfully update spot", null, 201);
+    } catch (error) {
+      if (isRedirect) {
+        req.flash("error", error.message);
+        console.log(error.message);
+        return res.redirect("/spot/edit");
       }
       return res.sendError(error.message, null, error.statusCode);
     }
@@ -118,14 +156,27 @@ export default (spotService, reviewService) => {
     return res.render("spot/new");
   };
 
+  const editView = async (req, res) => {
+    try {
+      const id = req.params.id;
+      const spot = await spotService.getDetail(id);
+      return res.render("spot/edit", { spot });
+    } catch (error) {
+      req.flash("error", error.message);
+      return res.redirect("spot/detail");
+    }
+  };
+
   return {
     getList,
     getDetail,
     insert,
+    update,
     insertReview,
     removeReview,
     listView,
     detailView,
     newView,
+    editView,
   };
 };

@@ -16,7 +16,7 @@ export default (db) => {
         { model: db.users, attributes: ["name"] },
         {
           model: db.images,
-          attributes: ["id", "url"],
+          attributes: ["url", "filename"],
         },
         {
           model: db.reviews,
@@ -27,5 +27,9 @@ export default (db) => {
       ],
     });
 
-  return { insert, findAll, findOneByID };
+  const updateByID = (id, data) => {
+    db.spots.update(data, { where: { id: id } });
+  };
+
+  return { insert, findAll, findOneByID, updateByID };
 };
