@@ -68,7 +68,7 @@ export default (app) => {
     _spotHandler.update
   );
   apiRoute.post("/spot/delete/:id", authMiddleware, _spotHandler.remove);
-  apiRoute.post("/spot/:id/review", authMiddleware, _spotHandler.update);
+  apiRoute.post("/spot/:id/review", authMiddleware, _spotHandler.insertReview);
   apiRoute.post(
     "/spot/:id/delete-review/:review_id",
     authMiddleware,

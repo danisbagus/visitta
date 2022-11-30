@@ -77,7 +77,7 @@ export default (spotService, reviewService) => {
 
       if (isRedirect) {
         req.flash("success", "Successfully update spot");
-        return res.redirect("/spot");
+        return res.redirect(`/spot/${spotID}`);
       }
 
       return res.sendSuccess("successfully update spot", null, 200);

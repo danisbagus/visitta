@@ -119,7 +119,7 @@ export default (spotRepository, imageRepository) => {
     }
 
     // delete images
-    if (form.deleteImages.length > 0) {
+    if (form.deleteImages) {
       for (let filename of form.deleteImages) {
         await cloudinary.cloudinary.uploader.destroy(filename);
       }
