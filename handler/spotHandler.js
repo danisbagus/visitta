@@ -80,12 +80,35 @@ export default (spotService, reviewService) => {
         return res.redirect("/spot");
       }
 
-      return res.sendSuccess("successfully update spot", null, 201);
+      return res.sendSuccess("successfully update spot", null, 200);
     } catch (error) {
       if (isRedirect) {
         req.flash("error", error.message);
-        console.log(error.message);
-        return res.redirect("/spot/edit");
+        return console.log(error.message);
+        // return res.redirect("/spot/edit");
+      }
+      return res.sendError(error.message, null, error.statusCode);
+    }
+  };
+
+  const remove = async (req, res) => {
+    const { isRedirect } = req.query;
+    const spotID = req.params.id;
+
+    try {
+      await spotService.remove(spotID);
+
+      if (isRedirect) {
+        req.flash("success", "Successfully delete spot");
+        return res.redirect("/spot");
+      }
+
+      return res.sendSuccess("successfully delete spot", null, 200);
+    } catch (error) {
+      if (isRedirect) {
+        req.flash("error", error.message);
+        return console.log(error.message);
+        // return res.redirect("/spot/edit");
       }
       return res.sendError(error.message, null, error.statusCode);
     }
@@ -172,6 +195,7 @@ export default (spotService, reviewService) => {
     getDetail,
     insert,
     update,
+    remove,
     insertReview,
     removeReview,
     listView,

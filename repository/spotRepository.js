@@ -31,5 +31,7 @@ export default (db) => {
     db.spots.update(data, { where: { id: id } });
   };
 
-  return { insert, findAll, findOneByID, updateByID };
+  const deleteByID = (id) => db.spots.destroy({ where: { id: id } });
+
+  return { insert, findAll, findOneByID, updateByID, deleteByID };
 };

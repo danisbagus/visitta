@@ -78,6 +78,9 @@ export default (spotRepository, imageRepository) => {
 
   const update = async (form) => {
     // validation
+    if (!form.spotID) {
+      throw errs.badRequestError("spot id is required");
+    }
     if (!form.title) {
       throw errs.badRequestError("title is required");
     }
@@ -116,7 +119,7 @@ export default (spotRepository, imageRepository) => {
     }
 
     // delete images
-    if (form.deleteImages) {
+    if (form.deleteImages.length > 0) {
       for (let filename of form.deleteImages) {
         await cloudinary.cloudinary.uploader.destroy(filename);
       }
@@ -125,5 +128,29 @@ export default (spotRepository, imageRepository) => {
     }
   };
 
-  return { insert, getList, getDetail, update };
+  const remove = async (id) => {
+    if (!id) {
+      throw errs.badRequestError("spot id is required");
+    }
+
+    const spot = await spotRepository.findOneByID(id);
+
+    if (!spot) {
+      throw errs.badRequestError("spot not found");
+    }
+
+    await spotRepository.deleteByID(id);
+
+    const deleteImages = spot.images.map((image) => image.filename);
+
+    if (deleteImages.length > 0) {
+      for (let filename of deleteImages) {
+        await cloudinary.cloudinary.uploader.destroy(filename);
+      }
+
+      await imageRepository.bulkDeleteByFilenames(deleteImages);
+    }
+  };
+
+  return { insert, getList, getDetail, update, remove };
 };

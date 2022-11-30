@@ -67,6 +67,7 @@ export default (app) => {
     upload.array("images"),
     _spotHandler.update
   );
+  apiRoute.post("/spot/delete/:id", authMiddleware, _spotHandler.remove);
   apiRoute.post("/spot/:id/review", authMiddleware, _spotHandler.update);
   apiRoute.post(
     "/spot/:id/delete-review/:review_id",

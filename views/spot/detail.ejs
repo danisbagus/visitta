@@ -42,7 +42,7 @@
                 <% if( currentUser && currentUser.role=='admin' ) {%>
                     <div class="card-body">
                         <a class="card-link btn btn-info" href="/spot/<%=spot.id%>/edit">Edit</a>
-                        <form class="d-inline" action="/spot/<%=spot.id%>?_method=DELETE" method="POST">
+                        <form class="d-inline" action="/api/spot/delete/<%=spot.id%>?isRedirect=true" method="POST">
                             <button class="btn btn-danger">Delete</button>
                         </form>
                     </div>
