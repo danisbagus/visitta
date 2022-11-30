@@ -14,7 +14,10 @@ export default (db) => {
       },
       include: [
         { model: db.users, attributes: ["name"] },
-        { model: db.images, attributes: ["url"] },
+        {
+          model: db.images,
+          attributes: ["id", "url"],
+        },
         {
           model: db.reviews,
           attributes: ["id", "user_id", "rating", "body"],

@@ -64,6 +64,13 @@ export default (spotRepository, imageRepository) => {
       throw errs.badRequestError("spot not found");
     }
 
+    spot.images.forEach((image, i) => {
+      spot.dataValues.images[i].thumbnail = image.url.replace(
+        "/upload",
+        "/upload/w_200"
+      );
+    });
+
     return spot;
   };
 
