@@ -17,6 +17,10 @@ module.exports = {
         type: Sequelize.STRING(100),
         required: true,
       },
+      filename: {
+        type: Sequelize.STRING(30),
+        required: true,
+      },
     });
   },
 

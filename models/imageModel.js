@@ -12,6 +12,9 @@ export default (sequelize, DataTypes) => {
       url: {
         type: DataTypes.STRING,
       },
+      filename: {
+        type: DataTypes.STRING,
+      },
     },
     {
       timestamps: false,
