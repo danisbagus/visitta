@@ -84,8 +84,7 @@ export default (spotService, reviewService) => {
     } catch (error) {
       if (isRedirect) {
         req.flash("error", error.message);
-        return console.log(error.message);
-        // return res.redirect("/spot/edit");
+        return res.redirect(`/spot/${spotID}/edit`);
       }
       return res.sendError(error.message, null, error.statusCode);
     }
@@ -107,8 +106,7 @@ export default (spotService, reviewService) => {
     } catch (error) {
       if (isRedirect) {
         req.flash("error", error.message);
-        return console.log(error.message);
-        // return res.redirect("/spot/edit");
+        return res.redirect(`/spot/${spotID}`);
       }
       return res.sendError(error.message, null, error.statusCode);
     }
@@ -176,17 +174,28 @@ export default (spotService, reviewService) => {
   };
 
   const newView = async (req, res) => {
+    if (typeof req.session.user == "undefined") {
+      req.session.returnTo = `/spot/new`;
+      return res.redirect("/login");
+    }
+
     return res.render("spot/new");
   };
 
   const editView = async (req, res) => {
+    const id = req.params.id;
+
+    if (typeof req.session.user == "undefined") {
+      req.session.returnTo = `/spot/${id}/edit`;
+      return res.redirect("/login");
+    }
+
     try {
-      const id = req.params.id;
       const spot = await spotService.getDetail(id);
       return res.render("spot/edit", { spot });
     } catch (error) {
       req.flash("error", error.message);
-      return res.redirect("spot/detail");
+      return res.redirect("/spot/detail");
     }
   };
 
