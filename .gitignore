@@ -104,4 +104,4 @@ dist
 .tern-port
 
 # sqlite db
-databases/visitta.db
+*.sqlite

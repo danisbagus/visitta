@@ -3,14 +3,14 @@ import config from "./app.js";
 export default {
   development: {
     dialect: "sqlite",
-    storage: `databases/${config.dbName}.db`,
+    storage: `${config.dbName}.sqlite`,
   },
   test: {
     dialect: "sqlite",
-    storage: `databases/${config.dbName}.db`,
+    storage: `${config.dbName}.sqlite`,
   },
   production: {
     dialect: "sqlite",
-    storage: `databases/${config.dbName}.db`,
+    storage: `${config.dbName}.sqlite`,
   },
 };
