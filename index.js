@@ -62,6 +62,8 @@ app.use((req, res, next) => {
 // routes
 routes(app);
 
+console.log(`env: ${process.env.NODE_ENV}`);
+
 app.listen(config.port, () => {
   console.log(`Running app on port ${config.port}`);
 });
