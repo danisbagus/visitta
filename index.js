@@ -26,35 +26,6 @@ const sessionConfig = {
   resave: false,
 };
 
-// // code for testing db on prod
-// const db = await connectToDB();
-
-// const insertdata = () =>
-//   db.exec(
-//     ` INSERT INTO users values ('testing1', '085', 'user', '123', '111')`
-//   );
-
-// const getusers = () => db.get("SELECT count(*), * FROM users");
-
-// import connectToDB from "./db/index.js";
-
-// const handleTesting = async (req, res) => {
-//   try {
-//     await insertdata();
-//     const userdata = await getusers();
-//     console.log(userdata);
-
-//     return res.status(200).send({ message: "success", data: userdata });
-//   } catch (error) {
-//     console.log(error.message);
-//     return res.status(500).send({ message: error.message });
-//   }
-// };
-
-// app.get("/testing", handleTesting);
-
-// // end of code for testing db on prod
-
 // template engine
 app.engine("ejs", ejsMate);
 app.set("view engine", "ejs");
