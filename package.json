@@ -40,7 +40,7 @@
     "randomstring": "^1.2.3",
     "sequelize": "^6.25.8",
     "sqlite": "^4.1.2",
-    "sqlite3": "^5.1.2"
+    "sqlite3": "5.0.0"
   },
   "devDependencies": {
     "babel-register": "^6.26.0",
